@@ -14,6 +14,7 @@
 		0000000000000000000000CC /* HouseOnSite/HouseSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000068 /* HouseOnSite/HouseSession.swift */; };
 		0000000000000000000000D2 /* house2story.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000006E /* house2story.usdz */; };
 		0000000000000000000000CD /* ARPhotoCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000000069 /* ARPhotoCapture.swift */; };
+		0000000000000000000000CE /* HouseLighting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000000000000000000006A /* HouseLighting.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		00000000000000000000006E /* house2story.usdz */ = {isa = PBXFileReference; lastKnownFileType = file; name = house2story.usdz; path = ../public/models/ios/house2story.usdz; sourceTree = "<group>"; };
 		00000000000000000000006F /* HouseOnSite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = HouseOnSite.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		000000000000000000000069 /* ARPhotoCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseOnSite/ARPhotoCapture.swift; sourceTree = "<group>"; };
+		00000000000000000000006A /* HouseLighting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseOnSite/HouseLighting.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +49,7 @@
 				000000000000000000000067 /* HouseOnSite/Placement.swift */,
 				000000000000000000000068 /* HouseOnSite/HouseSession.swift */,
 				000000000000000000000069 /* ARPhotoCapture.swift */,
+				00000000000000000000006A /* HouseLighting.swift */,
 				00000000000000000000006E /* house2story.usdz */,
 				000000000000000000000002 /* Products */,
 			);
@@ -133,6 +136,7 @@
 				0000000000000000000000CB /* HouseOnSite/Placement.swift in Sources */,
 				0000000000000000000000CC /* HouseOnSite/HouseSession.swift in Sources */,
 				0000000000000000000000CD /* ARPhotoCapture.swift in Sources */,
+				0000000000000000000000CE /* HouseLighting.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

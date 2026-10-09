@@ -26,6 +26,7 @@ Begin with free Xcode Personal Team testing on the owner's iPhone. Distribution 
 - `Placement.swift`: independent metric placement math; yaw, house-relative movement, and elevation about the normalized reference.
 - `HouseSession.swift`: ARKit world tracking and session lifecycle, detected-horizontal-plane raycasts, tracking feedback, and RealityKit display.
 - `ContentView.swift`: SwiftUI preview, instructions, permission recovery, placement controls, and Capture button.
+- `HouseLighting.swift`: automatic ARKit environment lighting and a 25%–400% virtual-scene brightness offset, adjustable while locked with Auto reset.
 - `ARPhotoCapture.swift`: ARView camera/model snapshots, add-only Photos saving, success/error feedback and retained-frame retry.
 - `ios/tools/prepare_house.py`: reproducible converter for this specific inspected GLB, with geometry, normals, UVs, embedded textures, and USD Preview Surface material mapping. It is not a general GLB importer.
 
@@ -51,7 +52,7 @@ Review the current elevations and textured native render in `docs/model-review/c
 
 ## Trial progress
 
-On October 9, 2026, the user reported the native prototype working outdoors at approximately 50 feet, reaching the street. No independent alignment/scale/drift measurements were provided; the 100-foot walk and one-foot accuracy gate remain pending. AR photo capture is now implemented for physical-device verification.
+On October 9, 2026, the user reported the native prototype working outdoors at approximately 50 feet, reaching the street. No independent alignment/scale/drift measurements were provided; the 100-foot walk and one-foot accuracy gate remain pending. AR photo capture is now implemented for physical-device verification. After the user reported the corrected facade working, a captured outdoor photo showed the house darker than its surroundings. Auto environment lighting plus House Brightness is implemented for a phone trial; manual sun direction, color warmth and lighting lock remain future work.
 
 ## Acceptance gate
 

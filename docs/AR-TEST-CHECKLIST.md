@@ -31,6 +31,15 @@ On October 9, 2026, the user reported successful outdoor use at approximately 50
 - [ ] Unsupported AR device/simulator retains real-model 3D preview.
 - [ ] Remove/rename bundled asset in a temporary test build: useful load error and retry. Do not commit the intentionally broken asset.
 
+### Auto lighting and House Brightness — physical checks pending
+
+- [ ] Start a fresh AR session: House controls shows Auto / 100%. Briefly scan nearby surroundings and check the corrected model under sun and shade.
+- [ ] Move brightness through 25%, 100% and 400%: the virtual house should visibly change brightness while the camera background retains its exposure behavior. Compare captured photos at the same view. Check roof texture and white trim remain visible rather than clipping.
+- [ ] Lock placement, change brightness and tap Auto: corner/yaw/elevation remain unchanged and tracking does not restart. Auto restores the unmodified automatic-lighting baseline.
+- [ ] Place again and exit/re-enter AR: the chosen brightness survives within the same open app. A fresh app launch restores Auto. The 3D preview retains its inspection lighting.
+- [ ] Confirm Capture includes the selected lighting and that controls remain reachable in portrait and landscape. Check performance with the full asset during a walk.
+- [ ] Record whether automatic lighting and the offset sufficiently match the physical site. Direct-sun direction, warmth and lighting lock are not implemented.
+
 ### AR photo capture — physical checks pending
 
 - [ ] With the house placed, tap Capture; confirm Photos contains the camera background and house at the framing shown in the viewer, without app text/buttons.

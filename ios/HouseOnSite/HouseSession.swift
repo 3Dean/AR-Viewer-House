@@ -52,7 +52,7 @@ final class HouseSession: NSObject, ObservableObject, ARSessionDelegate {
         isAR = true
     }
 
-    func attach(_ view: ARView, model: Entity) {
+    func attach(_ view: ARView, model: Entity, lighting: HouseLighting) {
         self.view = view
         adjustments = nil
         reference = nil
@@ -62,6 +62,8 @@ final class HouseSession: NSObject, ObservableObject, ARSessionDelegate {
             let configuration = ARWorldTrackingConfiguration()
             configuration.planeDetection = [.horizontal]
             configuration.worldAlignment = .gravity
+            lighting.configure(configuration)
+            lighting.apply(to: view)
             // No geographic anchors, printed targets, stored maps, or LiDAR requirement.
             view.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
             let tap = UITapGestureRecognizer(target: self, action: #selector(tapped(_:)))

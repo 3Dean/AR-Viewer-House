@@ -20,6 +20,16 @@ Lock blocks placement taps and transform edits while tracking continues. Guides 
 
 The 3D fallback uses the actual USDZ and drag-to-orbit. AR requires physical hardware; simulator preview does not establish tracking accuracy. Unavailable AR, denied camera, interruptions, and errors retain preview/restart paths. Only one supplied house exists; catalog, footprint/translucency modes, occlusion, terrain fitting, geographic/persistent/shared anchors, and Android are future work.
 
+## Auto lighting and House Brightness
+
+In AR, expand **House controls** and use the **House brightness** slider. The default is **Auto / 100%**, with light estimation and automatic environment texturing enabled. Scan nearby surroundings briefly to give the camera-based environment lighting time to update.
+
+The slider adjusts virtual-scene image-based lighting from 25% to 400% of the automatic baseline. Tap **Auto** to return to 100%. It does not change camera exposure, material colors or placement. The adjustment is available while placement is locked and does not restart the AR session. It persists across Place again and AR exit/re-entry within the open app; a fresh app launch defaults to Auto. The 3D preview keeps its separate inspection lighting. Captured AR photos include the current lighting adjustment.
+
+This initial feature uses RealityKit's environment-light intensity adjustment, which also applies to lit virtual guides. It does not add a manually positioned sun, color-temperature controls or fixed-lighting mode. Matching direct sunlight across a house-sized asset still requires physical-phone testing; automatic environmental lighting is not a guarantee of photographic matching.
+
+Implementation references: [automatic environment texturing](https://developer.apple.com/documentation/arkit/arworldtrackingconfiguration/environmenttexturing-swift.enum), [RealityKit environment probes](https://developer.apple.com/documentation/realitykit/arview/renderoptions-swift.struct/disablearenvironmentlighting), and [image-based light intensity](https://developer.apple.com/documentation/realitykit/arview/environment-swift.struct/imagebasedlight/intensityexponent).
+
 ## Capture an AR photo
 
 After placing the house, tap **Capture** at the bottom-right of the AR viewer. The saved image contains the camera view and rendered house, including any visible corner/direction guides. Hide guides with the existing toggle if desired. The capture uses the viewer's current framing and resolution; app buttons and text are outside the captured ARView.

@@ -5,6 +5,7 @@ struct ContentView: View {
     @StateObject private var asset = HouseAsset()
     @StateObject private var session = HouseSession()
     @StateObject private var photoCapture = ARPhotoCapture()
+    @StateObject private var lighting = HouseLighting()
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     @State private var orbit: Float = 0
@@ -18,7 +19,7 @@ struct ContentView: View {
                 Text("≈ 50′ wide × 45′ deep × 27′ high").font(.subheadline)
             }
             if let model = asset.entity {
-                HouseView(session: session, model: model, orbit: orbit)
+                HouseView(session: session, lighting: lighting, model: model, orbit: orbit)
                     .id(session.isAR)
                     .gesture(DragGesture().onChanged { value in
                         if !session.isAR { orbit = lastOrbit + Float(value.translation.width) * 0.008 }
@@ -66,7 +67,28 @@ struct ContentView: View {
                         .disabled(!session.placed)
                 }
                 ScrollView {
-                DisclosureGroup("Placement controls", isExpanded: $showControls) {
+                DisclosureGroup("House controls", isExpanded: $showControls) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack {
+                            Text("Lighting").font(.headline)
+                            Spacer()
+                            Button("Auto") { lighting.resetToAuto() }
+                                .disabled(lighting.isAuto)
+                        }
+                        HStack {
+                            Text("House brightness")
+                            Spacer()
+                            Text("\(lighting.brightnessPercent)%").monospacedDigit()
+                        }
+                        Slider(value: $lighting.brightnessStops, in: -2...2, step: 0.1)
+                            .accessibilityLabel("House brightness")
+                            .accessibilityValue("\(lighting.brightnessPercent) percent of automatic lighting")
+                        Text(lighting.isAuto ? "Auto • lighting follows your surroundings" : "Auto lighting with brightness adjustment")
+                            .font(.caption)
+                        Divider()
+                        Text("Placement").font(.headline)
+                    }
+
                     VStack(spacing: 8) {
                         Text("Green pin: marked front-left foundation. Yellow: front. Red: right. Blue: rear.")
                             .font(.caption)
@@ -123,15 +145,19 @@ struct ContentView: View {
 
 private struct HouseView: UIViewRepresentable {
     @ObservedObject var session: HouseSession
+    @ObservedObject var lighting: HouseLighting
     let model: Entity
     let orbit: Float
     func makeUIView(context: Context) -> ARView {
         let view = ARView(frame: .zero, cameraMode: session.isAR ? .ar : .nonAR, automaticallyConfigureSession: false)
-        session.attach(view, model: model)
+        session.attach(view, model: model, lighting: lighting)
         return view
     }
     func updateUIView(_ view: ARView, context: Context) {
-        if session.isAR { session.installHouse(model) }
+        if session.isAR {
+            session.installHouse(model)
+            lighting.apply(to: view)
+        }
         else { session.orbit(orbit) }
     }
     static func dismantleUIView(_ view: ARView, coordinator: ()) {
