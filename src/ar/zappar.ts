@@ -5,14 +5,17 @@ import type { WebGLRenderer } from 'three';
 export function createTracking(renderer: WebGLRenderer) {
   Zappar.glContextSet(renderer.getContext());
   const camera = new Zappar.Camera({ zNear: 0.05, zFar: 250 });
+  camera.poseMode = Zappar.CameraPoseMode.Attitude;
   const tracker = new Zappar.InstantWorldTracker();
   const anchor = new Zappar.InstantWorldAnchorGroup(camera, tracker);
   return {
     camera, anchor,
+    incompatible: () => Zappar.browserIncompatible(),
     requestPermission: () => Zappar.permissionRequest(),
     start: () => camera.start(),
     update: () => camera.updateFrame(renderer),
     setAnchorOffset: (x: number, y: number, z: number) => tracker.setAnchorPoseFromCameraOffset(x, y, z),
     stop: () => camera.stop(),
+    dispose: () => { camera.stop(); tracker.destroy(); camera.dispose(); },
   };
 }

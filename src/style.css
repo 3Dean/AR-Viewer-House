@@ -25,4 +25,7 @@ input[type=range] { width: 100%; accent-color: #315c50; }
 .primary { background: #254f43; color: white; border-color: #254f43; width: 100%; }
 #status { font-size: 14px; line-height: 1.5; margin: 0; }
 .note { color: #52665f; font-size: 13px; line-height: 1.5; }
+input[type=number] { display: block; width: 100%; min-height: 44px; margin-top: 8px; border: 1px solid #b6c4bc; border-radius: 8px; padding: 8px; }
+[hidden] { display: none !important; }
+.ar-active .stage { position: sticky; top: 0; z-index: 2; }
 @media(max-width: 760px) { header { padding: 16px; } header p { font-size: 13px; } main { display: block; padding: 0 12px calc(16px + env(safe-area-inset-bottom)); } .stage { min-height: 320px; height: 48dvh; } aside { margin-top: 12px; } .cards { grid-template-columns: repeat(3,1fr); } .card { padding: 10px; display: block; } .swatch { display: block; margin-bottom: 8px; } }

@@ -14,9 +14,9 @@ For reproducible installs after the lockfile is created, use `npm ci`. Commit `p
 - Three-entry catalog: House 1 available; Houses 2 and 3 await supplied exports.
 - Rotation and foundation-height controls, reset, and origin visualization.
 - On-demand model loading, progress/error reporting, stale-load protection, and resource disposal.
-- Separate typed Zappar camera/tracking adapter, compiled with the application but not activated by the preview.
+- On-demand Zappar tracking adapter with experimental ground placement, phone-height input, movement, lock/unlock, and exit controls.
 
-AR placement, metric initialization, detailed field controls, and outdoor accuracy validation remain implementation work. The disabled AR button communicates this. The model's front direction and foundation reference also require visual confirmation; its current origin normalization is a provisional bounding-box corner.
+AR placement is available after the model loads. Enter approximate phone-camera height, start AR, aim down, and tap nearby ground. Adjust rotation, movement, and elevation, then lock. Phone height and flat-ground assumptions estimate scale; actual metric accuracy remains unverified. The model's front direction and foundation reference require visual confirmation; its current origin is a provisional bounding-box corner. See `docs/AR-TEST-CHECKLIST.md` for device trials.
 
 ## Project layout
 
@@ -40,9 +40,9 @@ The intended axes after normalization are +Y up, +X left-to-right across the fac
 
 Camera access on phones requires HTTPS (desktop localhost is a development exception). A LAN HTTP address is sufficient for previewing 3D but generally cannot start phone camera access. Use an approved HTTPS deployment or trusted local HTTPS setup for device trials.
 
-Confirm Zappar production licensing and domain requirements before enabling a public AR build. Call camera/motion permission requests from a user gesture. Stop camera processing when exiting AR. Verify the SDK's WebAssembly asset delivery in the chosen build/deployment configuration before enabling AR; the production preview currently does not load that adapter at runtime.
+Confirm Zappar production licensing and domain requirements before enabling a public AR build. Camera/motion permission requests use the SDK's permission interface for a user gesture. Camera processing stops when exiting AR. Vite emits the SDK's WebAssembly and worker assets; the local production browser check requested those resources successfully. Verify delivery again on the chosen HTTPS deployment.
 
-The adapter provides camera updates and camera-relative anchoring, not a verified metric ground hit-test. Implement phone-height/orientation initialization and validate scale and drift before presenting one-foot accuracy as supported.
+The adapter provides camera updates and camera-relative anchoring, not a verified metric ground hit-test. Phone-height/orientation initialization rejects near-horizontal rays and estimated placement distances beyond eight meters. Validate scale and drift before presenting one-foot accuracy as supported. Hiding the page ends AR and requires new placement.
 
 Official references:
 
