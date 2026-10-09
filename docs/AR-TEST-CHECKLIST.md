@@ -12,7 +12,9 @@ The Swift/ARKit/RealityKit app is in `ios/`. The web baseline at `5174008` is pr
 - [x] Native placement-math checks pass for metric steps, rotated directions, elevation and corner pivot.
 - Geometry-only review identified the -Z entrance facade and front-left side-wing foundation ground vertex. See `MODEL-REFERENCE.md`. Physical-device visual confirmation remains required.
 
-### Physical iPhone checks — not yet completed
+### Physical iPhone checks — formal checklist pending
+
+On October 9, 2026, the user reported successful outdoor use at approximately 50′ to the street. Device/iOS, lighting, surface and independent error measurements were not supplied; this report does not establish one-foot accuracy or 100′ performance.
 
 - [ ] Install on iPhone 13 Pro Max with Personal Team signing; record iOS and app revision.
 - [ ] Orbit the 3D preview. Check texture orientation, glass, normals, materials, ground and overall shape against the source.
@@ -29,6 +31,15 @@ The Swift/ARKit/RealityKit app is in `ios/`. The web baseline at `5174008` is pr
 - [ ] Unsupported AR device/simulator retains real-model 3D preview.
 - [ ] Remove/rename bundled asset in a temporary test build: useful load error and retry. Do not commit the intentionally broken asset.
 
+### AR photo capture — physical checks pending
+
+- [ ] With the house placed, tap Capture; confirm Photos contains the camera background and house at the framing shown in the viewer, without app text/buttons.
+- [ ] Test unlocked/locked placement, portrait/landscape, and visible/hidden guides. Capture should work while locked and include guides only when visible.
+- [ ] First save requests only add-photo permission. Grant it and confirm success feedback; saving another frame should not ask again.
+- [ ] Deny add-photo permission: confirm recoverable feedback, retained image, Settings link and Retry saving photo. After enabling access, retry should save the original captured frame, even if AR was reset while opening Settings.
+- [ ] The Photos permission prompt should not itself reset placement. Actually backgrounding, or an AR session interruption, must still reset placement safely.
+- [ ] Tap rapidly: only one capture/save should be in flight. Test interrupted capture and save failures; retry should remain available on failure.
+
 ### Outdoor accuracy gate
 
 Use independent temporary tape-measured ground references for evaluation; these are measurement tools, not a printed tracking target in the visitor experience. Keep the virtual corner/reference definition consistent with the measured real-world reference.
@@ -42,7 +53,7 @@ Use independent temporary tape-measured ground references for evaluation; these 
 
 | Date / app revision | iPhone / iOS | Surface / slope / light | Trial | Initial error m / heading ° | Scale error | Distance ft | Error at distance m | Return drift m | Tracking / performance notes |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Not run | | | | | | | | | |
+| 2026-10-09 / revision not confirmed | Not recorded | Not recorded | User-reported outdoor use to street; working well | Not measured | Not measured | ≈50 | Not measured | Not measured | 100′ trial pending |
 
 Ground slope fitting, real-world occlusion, geographic anchoring, shared/persistent placement and Android are not supported in this prototype. Free personal testing is not public visitor distribution.
 

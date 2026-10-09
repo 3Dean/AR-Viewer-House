@@ -4,6 +4,7 @@ import RealityKit
 struct ContentView: View {
     @StateObject private var asset = HouseAsset()
     @StateObject private var session = HouseSession()
+    @StateObject private var photoCapture = ARPhotoCapture()
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     @State private var orbit: Float = 0
@@ -26,6 +27,19 @@ struct ContentView: View {
                         Text(session.isAR ? "AR field prototype" : "3D preview • drag to orbit")
                             .font(.caption.bold()).padding(8).background(.regularMaterial).cornerRadius(8).padding(8)
                     }
+                    .overlay(alignment: .bottomTrailing) {
+                        if session.isAR {
+                            Button {
+                                photoCapture.capture(view: session.view)
+                            } label: {
+                                Label(photoCapture.busy ? "Saving…" : "Capture", systemImage: "camera.fill")
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .disabled(!session.placed || photoCapture.busy)
+                            .accessibilityLabel("Capture AR photo to Photos")
+                            .padding(8)
+                        }
+                    }
             } else {
                 Spacer()
                 if asset.loading { ProgressView("Loading house…") }
@@ -36,6 +50,9 @@ struct ContentView: View {
                 Button("Retry house loading") { asset.load() }
             }
             Text(session.status).font(.callout)
+            if photoCapture.hasUnsavedPhoto && !photoCapture.busy {
+                Button("Retry saving photo") { photoCapture.retrySave() }
+            }
             if session.cameraDenied {
                 Button("Open camera settings") {
                     if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
@@ -87,8 +104,19 @@ struct ContentView: View {
         .controlSize(.large)
         .padding(verticalSizeClass == .compact ? 8 : 16)
         .task { asset.load() }
+        .alert(item: $photoCapture.notice) { notice in
+            if notice.offerSettings {
+                return Alert(title: Text(notice.title), message: Text(notice.message),
+                             primaryButton: .default(Text("Open Settings")) {
+                                 if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
+                             }, secondaryButton: .cancel())
+            }
+            return Alert(title: Text(notice.title), message: Text(notice.message), dismissButton: .default(Text("OK")))
+        }
         .onChange(of: scenePhase) { _, phase in
-            if phase != .active && session.isAR { session.exitAR(message: "App left foreground. Start AR and place again.") }
+            if session.isAR && (phase == .background || (phase == .inactive && !photoCapture.permissionPromptActive)) {
+                session.exitAR(message: "App left foreground. Start AR and place again.")
+            }
         }
     }
 }

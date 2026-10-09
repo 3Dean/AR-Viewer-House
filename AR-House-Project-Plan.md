@@ -25,7 +25,8 @@ Begin with free Xcode Personal Team testing on the owner's iPhone. Distribution 
 - `HouseAsset.swift`: demand-driven USDZ loading, reusable entity, retry and retained entity on loading failure.
 - `Placement.swift`: independent metric placement math; yaw, house-relative movement, and elevation about the normalized reference.
 - `HouseSession.swift`: ARKit world tracking and session lifecycle, detected-horizontal-plane raycasts, tracking feedback, and RealityKit display.
-- `ContentView.swift`: SwiftUI preview, instructions, permission recovery, and placement controls.
+- `ContentView.swift`: SwiftUI preview, instructions, permission recovery, placement controls, and Capture button.
+- `ARPhotoCapture.swift`: ARView camera/model snapshots, add-only Photos saving, success/error feedback and retained-frame retry.
 - `ios/tools/prepare_house.py`: reproducible converter for this specific inspected GLB, with geometry, normals, UVs, embedded textures, and USD Preview Surface material mapping. It is not a general GLB importer.
 
 ARKit provides a metric world-tracking session. Place on detected horizontal plane geometry near the visitor (within 8 m), with normal tracking. There is no approximate phone-height input. Estimated-plane raycasts are deliberately not used. Horizontal surfaces still require the visitor to choose ground: a table or raised surface is not automatically classified as ground. Position the reference on a nearby detected surface, then use the controls for alignment. Do not interpret normal tracking as a quantified accuracy guarantee.
@@ -47,6 +48,10 @@ Review elevations and diagonal geometry views in `docs/model-review/`. The entra
 3. **Outdoor feasibility gate:** separately measure initial error, scale agreement, and drift at 10′, 25′, 50′, and 100′. Cover grass/pavement, sun/shade, camera turns, return to origin, and tracking loss. Independent measured references are required for validation, although visitors use no printed target. Record results in `docs/AR-TEST-CHECKLIST.md`.
 4. **Refinement and catalog:** only after the gate, refine coarse/fine controls, footprint/translucency modes, onboarding, and performance. Add the two forthcoming color variants with independently reviewed origins. Catalog replacement must preserve placement, retain the current model on failure, load on demand, and release unused entities/resources.
 5. **Distribution and Android decision:** select a distribution route and budget after feasibility. Free personal testing does not provide public visitor distribution. Evaluate ARCore for Android with separate device/outdoor trials rather than claiming feature parity from shared placement math.
+
+## Trial progress
+
+On October 9, 2026, the user reported the native prototype working outdoors at approximately 50 feet, reaching the street. No independent alignment/scale/drift measurements were provided; the 100-foot walk and one-foot accuracy gate remain pending. AR photo capture is now implemented for physical-device verification.
 
 ## Acceptance gate
 

@@ -2,7 +2,7 @@
 from pathlib import Path
 root=Path(__file__).resolve().parents[1]
 uid=lambda n:f'{n:024X}'
-files=['HouseOnSiteApp.swift','ContentView.swift','HouseAsset.swift','Placement.swift','HouseSession.swift']
+files=['HouseOnSiteApp.swift','ContentView.swift','HouseAsset.swift','Placement.swift','HouseSession.swift','ARPhotoCapture.swift']
 objects=[]
 def add(n,body): objects.append(f'{uid(n)} = {{ {body} }};')
 for i,file in enumerate(files):

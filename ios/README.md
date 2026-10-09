@@ -20,6 +20,14 @@ Lock blocks placement taps and transform edits while tracking continues. Guides 
 
 The 3D fallback uses the actual USDZ and drag-to-orbit. AR requires physical hardware; simulator preview does not establish tracking accuracy. Unavailable AR, denied camera, interruptions, and errors retain preview/restart paths. Only one supplied house exists; catalog, footprint/translucency modes, occlusion, terrain fitting, geographic/persistent/shared anchors, and Android are future work.
 
+## Capture an AR photo
+
+After placing the house, tap **Capture** at the bottom-right of the AR viewer. The saved image contains the camera view and rendered house, including any visible corner/direction guides. Hide guides with the existing toggle if desired. The capture uses the viewer's current framing and resolution; app buttons and text are outside the captured ARView.
+
+The first save asks for permission to add photos. The app requests add-only access and does not read your library. A success alert confirms the save to Photos. Repeated taps are disabled while capturing/saving. If permission or saving fails, the captured image stays in memory and **Retry saving photo** can save that same frame after recovery. A new capture replaces an unsaved image; closing the app discards it. Opening Settings backgrounds the app, so restarting AR requires placement again, but saving the retained photo does not.
+
+The Photos permission prompt itself is exempt from the normal inactive-state reset; actually backgrounding or an AR session interruption still resets placement. Test permission, capture framing and saving on the physical phone.
+
 ## Build and preparation
 
 Unsigned compilation (not phone installation):
@@ -54,4 +62,4 @@ swiftc -module-cache-path /tmp/house-swift-cache ios/HouseOnSite/Placement.swift
 /tmp/house-placement-tests
 ```
 
-Local validation on October 8, 2026: Xcode 26.3 unsigned iPhone build succeeded; RealityKit macOS loaded the USDZ at the expected bounds; native SceneKit textured render reviewed; placement checks and web tests/build passed. No physical-phone or outdoor trial has been performed.
+Local validation on October 8, 2026: Xcode 26.3 unsigned iPhone build succeeded; RealityKit macOS loaded the USDZ at the expected bounds; native SceneKit textured render reviewed; placement checks and web tests/build passed. At that time no physical-phone or outdoor trial had been performed. On October 9 the user reported the prototype working outdoors at approximately 50′ to the street; measured error and the 100′ trial remain pending.

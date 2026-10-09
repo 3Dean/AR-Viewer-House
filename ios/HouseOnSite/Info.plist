@@ -16,6 +16,8 @@
 	<string>0.1</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Save a photo of the house and camera view you capture in AR.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Place the life-size house on nearby ground and view it through your camera.</string>
 	<key>UIApplicationSceneManifest</key>
