@@ -1,8 +1,12 @@
 # House on Site
 
-Mobile-first outdoor house visualization prototype using TypeScript, Three.js, Vite, and a separate Zappar Universal AR adapter.
+The active prototype is a native iPhone app using Swift, ARKit, and RealityKit in [`ios/`](ios/README.md), starting with free Xcode personal-device testing. Android is deferred until iPhone field validation. Zapworks commercial pricing exceeds the project budget.
 
-## Run locally
+The TypeScript/Three.js/Vite/Zappar web prototype from `5174008` is preserved below as an experimental viewer. It is not the active AR development path. One-foot alignment over walks up to 100 feet remains a field-test target. See the updated project plan and `docs/AR-TEST-CHECKLIST.md`.
+
+The native asset is `public/models/ios/house2story.usdz`. Its visually reviewed front-left side-wing foundation reference is documented in `docs/MODEL-REFERENCE.md`; the preserved web normalization remains provisional.
+
+## Run the preserved web prototype
 
 Use Node.js 22.12 or newer. Install dependencies with `npm install`, then run `npm run dev`. Open the address printed by Vite. Run `npm run build` for strict TypeScript checking and a production build; `npm run preview` serves the built files locally.
 
@@ -34,7 +38,7 @@ AR placement is available after the model loads. Enter approximate phone-camera 
 
 Place the GLBs under `public/models/`, then add their URLs to `src/catalog.ts`. Use `import.meta.env.BASE_URL` so paths respect deployments under a subdirectory. Set each entry's dimensions and verified front rotation. Until normalization is verified, leave `originVerified` false. Keep geometry, scale, and transforms identical for the initial color variants. Do not rename an unrelated model to overwrite the original source.
 
-The intended axes after normalization are +Y up, +X left-to-right across the facade, and +Z front-to-back. Each house must share the semantic front-left ground reference, even when dimensions differ. A bounding-box corner may include steps or overhangs and requires review.
+The web metadata uses a provisional +Y up, +X across-facade, +Z front-to-back convention. Native review uses the corrected right-handed +X facade-right, +Y up, +Z front convention; see `docs/MODEL-REFERENCE.md`. Each house must share the semantic front-left ground reference, even when dimensions differ. A bounding-box corner may include steps or overhangs and requires review.
 
 ## AR integration requirements
 

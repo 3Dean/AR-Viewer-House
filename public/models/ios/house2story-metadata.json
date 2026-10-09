@@ -1,0 +1,33 @@
+{
+  "sourceSHA256": "03f2647eed8eb6ca1d8dc1b7bc1af03b99219ebc30e42dda01f64a54bd5a84c3",
+  "assetSHA256": "153fc33eb2973ab4642e4f3989dce3dcdc37504468543f92800873c2d92919c2",
+  "metersPerUnit": 1,
+  "sourceReferenceMeters": [
+    10.65718,
+    2.75134113658345,
+    -3.51579
+  ],
+  "reference": "front-left side-wing foundation ground vertex; source entrance facade -Z, canonical front +Z",
+  "frontDirection": [
+    0,
+    0,
+    1
+  ],
+  "rightDirection": [
+    1,
+    0,
+    0
+  ],
+  "rearDirection": [
+    0,
+    0,
+    -1
+  ],
+  "dimensionsMeters": [
+    15.2991334877,
+    8.3009296001,
+    13.7675261965
+  ],
+  "visualReview": "Geometry elevations and four diagonals reviewed; facade -Z; reference is left side-wing foundation corner, not entry steps or roof bounds. Textures require RealityKit device review.",
+  "triangleCount": 14987
+}

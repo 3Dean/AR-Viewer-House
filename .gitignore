@@ -5,3 +5,13 @@ dist/
 !.env.example
 *.local
 *.log
+
+# Native build products and per-user signing/settings
+public/models/ios/conversion/
+ios/build/
+ios/DerivedData/
+**/xcuserdata/
+*.xcuserstate
+
+# macOS Finder metadata
+.DS_Store

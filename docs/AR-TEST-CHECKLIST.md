@@ -1,24 +1,51 @@
-# AR prototype device trial
+# AR prototype device and outdoor trial
 
-## Verified locally
+## Active prototype: native iPhone
 
-- Strict TypeScript and production build pass.
-- Ground-estimation tests pass for downward/angled rays, invalid heights, near-horizontal rays, and excessive distances.
-- Production preview loads the GLB and enables Start AR.
-- Starting AR requests the emitted Zappar WebAssembly and worker resources.
-- Denied/unavailable camera access returns to the 3D preview with recovery instructions.
+The Swift/ARKit/RealityKit app is in `ios/`. The web baseline at `5174008` is preserved; Zappar commercial deployment is deferred because of cost. Use `ios/README.md` for free Personal Team signing. Installation/signing needs Xcode on macOS. A build or native asset loader check does not establish outdoor accuracy.
 
-## Physical device checks still required
+### Local checks
 
-Use an HTTPS URL and confirm Zappar domain/licensing requirements first. Test on iPhone Safari and Android Chrome. The local LAN HTTP URL cannot provide normal phone camera access.
+- [x] Unsigned iOS device-SDK build passes: Xcode 26.3, iPhoneOS 26.2 SDK, iOS 17 deployment target.
+- [x] RealityKit macOS loader confirms USDZ dimensions; SceneKit native textured render reviewed; source SHA matches both unchanged GLBs.
+- [x] Root `npm test` (3 checks) and `npm run build` pass for the preserved web prototype.
+- [x] Native placement-math checks pass for metric steps, rotated directions, elevation and corner pivot.
+- Geometry-only review identified the -Z entrance facade and front-left side-wing foundation ground vertex. See `MODEL-REFERENCE.md`. Physical-device visual confirmation remains required.
 
-1. Confirm facade orientation and the green pin's architectural front-left corner. Current bounding-box normalization remains provisional.
-2. Enter phone camera height above ground in feet, start AR, and accept camera/motion access.
-3. Briefly scan textured surroundings, then aim down and tap nearby ground. A horizon tap should be rejected with guidance.
-4. Check the pin stays on estimated ground and the house remains upright. Check portrait and landscape.
-5. Try footprint view, rotation, house-relative movement, elevation, lock/unlock, place again, and exit.
-6. Lock the house, walk gradually away, turn the camera, and return. Start with short distances before a 100-foot trial.
-7. Deny permissions, hide/restore the page, and repeat AR startup. Check the camera stops and new placement is required.
-8. Add the two later exports and test replacement without losing the anchor or adjustment values.
+### Physical iPhone checks — not yet completed
 
-Run `npm test` for placement math and `npm run build` before a trial. Record device/browser, phone-height estimate, ground slope, lighting, initial scale/alignment error, walking distance, and observed drift. Independent measured references are needed to establish one-foot accuracy. Current placement does not account for terrain slope or real-world occlusion.
+- [ ] Install on iPhone 13 Pro Max with Personal Team signing; record iOS and app revision.
+- [ ] Orbit the 3D preview. Check texture orientation, glass, normals, materials, ground and overall shape against the source.
+- [ ] Confirm green reference is the front-left outer side-wing foundation corner, not the roof/gutter bounding corner or right-side entry steps; confirm owner agrees with that reference.
+- [ ] Verify independent overall dimensions. Nominal 50′ × 45′ × 27′; source bounds ≈50.19′ × 45.17′ × 27.23′. No arbitrary scaling.
+- [ ] Start AR, grant camera access, scan textured nearby ground. No printed target and no phone-height entry.
+- [ ] Place on detected horizontal ground within 8 m. Taps without a detected surface or normal tracking should not place; visitors must distinguish ground from tables/raised surfaces.
+- [ ] Initial facade faces the visitor. Rotation pivots at the pin; house-relative movement changes by 1′; elevation changes by 3″. Check signs and displayed values.
+- [ ] Lock prevents taps, rotation, movement, elevation, and Place again; tracking continues. Unlock and place again work.
+- [ ] Check portrait/landscape, safe areas, outdoor readability, VoiceOver labels, control reachability, frame rate, thermal load and memory over repeated sessions.
+- [ ] Deny camera permission: preview remains usable; Settings link and retry recover after permission is granted.
+- [ ] Exit AR stops camera. Background/foreground, phone call and forced session interruption return to preview and require a new placement.
+- [ ] Cover the camera or face a featureless area: limited tracking is visible and editing is disabled; no quantified accuracy claim follows from “normal.”
+- [ ] Unsupported AR device/simulator retains real-model 3D preview.
+- [ ] Remove/rename bundled asset in a temporary test build: useful load error and retry. Do not commit the intentionally broken asset.
+
+### Outdoor accuracy gate
+
+Use independent temporary tape-measured ground references for evaluation; these are measurement tools, not a printed tracking target in the visitor experience. Keep the virtual corner/reference definition consistent with the measured real-world reference.
+
+- [ ] Measure initial horizontal corner error and heading error before walking.
+- [ ] Independently check metric scale against known house dimensions/footprint references; log separately from corner error.
+- [ ] Walk progressively to 10′, 25′, 50′ and 100′ (30.48 m). At each distance, measure observed alignment error using fixed references; turn the camera and return to the corner.
+- [ ] Repeat independent placements/sessions on pavement and grass, in shade and bright sun. Record slope and feature quality.
+- [ ] Record return-to-origin drift, tracking losses, recovery, and any anchor jumps separately from initial placement error.
+- [ ] Accept approximately one-foot alignment only if representative trials demonstrate ≤0.3048 m error under the intended conditions. Otherwise document achieved distance/tolerance and revise approach.
+
+| Date / app revision | iPhone / iOS | Surface / slope / light | Trial | Initial error m / heading ° | Scale error | Distance ft | Error at distance m | Return drift m | Tracking / performance notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Not run | | | | | | | | | |
+
+Ground slope fitting, real-world occlusion, geographic anchoring, shared/persistent placement and Android are not supported in this prototype. Free personal testing is not public visitor distribution.
+
+## Preserved web checks (historical)
+
+The earlier local work reported strict TypeScript/build and ground-estimation tests passing, GLB preview loading, emitted Zappar WASM/worker requests, and camera-denial recovery. Re-run web checks when changing that implementation. Its phone-height/flat-plane scale estimate and bounding corner remain provisional. Web physical trials still need HTTPS and appropriate Zappar domain/licensing access; they are separate from the active native feasibility gate.
