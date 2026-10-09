@@ -10,9 +10,9 @@ Begin with free Xcode Personal Team testing on the owner's iPhone. Distribution 
 
 ## Requirements
 
-- Source: original `house2story.glb`, unchanged. Derived RealityKit asset: `public/models/ios/house2story.usdz`, bundled by the Xcode project in `ios/`.
+- Active native source: `house2story-front-corrected.glb`, supplied October 9, 2026. Preserve both it and the original `house2story.glb` unchanged. Derived RealityKit asset: `public/models/ios/house2story.usdz`, bundled by the Xcode project in `ios/`.
 - Nominal dimensions: approximately 50′ wide × 45′ deep × 27′ high. Actual transformed bounds: 15.2991 × 13.7675 × 8.3009 m (width × depth × height), approximately 50.19′ × 45.17′ × 27.23′. Preserve glTF metre units and proportions; do not stretch axes or offer visitor scaling.
-- Corner: front-left **outer side-wing foundation ground corner** while facing the entrance facade. The leftmost wing is recessed relative to the central entrance facade. Use its actual front-left foundation vertex, not the empty corner of the overall footprint bounds or the entry steps on the right. Document the selected feature explicitly rather than substituting the bounding corner.
+- Corner: the user-marked front-left foundation corner of the projecting front bay beside the downspout, left of the entry porch. The front facade has a balcony and garage on the viewer’s right. Use the supplied `docs/model-review/frontleftcornerinred.png` reference; this supersedes the previous facade and side-wing corner interpretation.
 - Controls: initial ground tap, rotation, house-relative horizontal movement, elevation, lock/unlock, place again, and return to 3D preview.
 - Lock freezes visitor edits; it does not freeze tracking or eliminate drift.
 - Unsupported devices and camera denial retain the interactive 3D preview.
@@ -37,9 +37,9 @@ Scene interruptions, backgrounding, and session errors pause tracking and discar
 
 The source contains 14,987 triangles, 11 material primitives, and 30 embedded JPEG textures. The converter bakes the supplied node transform once, subtracts the reviewed corner, then rotates 180° about Y. It does not resize the house. USD uses Y up and `metersPerUnit = 1`.
 
-Review elevations and diagonal geometry views in `docs/model-review/`. The entrance facade faces source -Z. When viewed from there, source +X is screen-left. Conversion rotates 180° about Y, so native +X is facade-right, +Z front and -Z rear. This right-handed native convention differs from the earlier provisional web convention. A matching vertex in the first-floor wall primitive supports the selected side-wing foundation reference at source-world coordinates approximately `(10.657180, 2.751341, -3.515790)` metres. The overall bounds start at `(-4.574090, 2.751341, -7.801472)` and include gutter/roof protrusions; that bounding corner is not the selected feature. Some geometry consequently has negative normalized X or Z coordinates, as it should.
+Review the current elevations and textured native render in `docs/model-review/corrected/`. The corrected export's balcony/garage facade faces source -Z. The converter subtracts the user-marked first-floor foundation vertex `(5.9146948158741, -0.005815446376800537, -4.7086732387542725)` metres, then maps source -Z to native +Z front. Native +X is facade-right and -Z rear. Some geometry extends left/forward of this architectural feature; it is not an overall bounds corner.
 
-`docs/model-review/front-reference.png` marks the selected corner. `public/models/ios/house2story-metadata.json` records reference, dimensions, and source/asset hashes. See `docs/MODEL-REFERENCE.md` for review evidence and limitations. Visual geometry review does not certify architectural survey accuracy or substitute for checking the textured house on an iPhone.
+`ios/tools/house-reference.json` makes source filename, corner, reference material and axis mapping explicit. `public/models/ios/house2story-metadata.json` records actual dimensions, hashes and normalized bounds. See `docs/MODEL-REFERENCE.md` for the user's marked image and matching green-pin render. The previous side-wing reference is superseded. Physical-iPhone confirmation of the corrected facade/pivot is pending; successful asset loading does not establish outdoor accuracy.
 
 ## Implementation phases
 
@@ -56,7 +56,7 @@ On October 9, 2026, the user reported the native prototype working outdoors at a
 ## Acceptance gate
 
 - Native app installs and renders the real asset on the tested iPhone.
-- User confirms the entrance facade and selected front-left side-wing foundation corner; no bounding-box corner substitution.
+- User confirms the entrance facade and user-marked front-left front-bay foundation corner; no bounding-box corner substitution.
 - Proportions and approximately life-size dimensions agree with independent measurements.
 - Rotation, movement, elevation, lock/unlock, place again, and preview recovery work in portrait and landscape.
 - Camera denial, unsupported AR, backgrounding, interrupted tracking, and loading errors remain recoverable.
@@ -66,6 +66,6 @@ On October 9, 2026, the user reported the native prototype working outdoors at a
 
 ## Remaining decisions
 
-Confirm the side-wing foundation corner is the intended architectural reference; obtain the two colored variants; determine whether the nominal dimensions include steps and overhangs; select a field location and independent measurements; assess outdoor tracking; then choose visitor distribution and an Android test device.
+Verify the corrected asset on the iPhone using the supplied red-arrow corner reference; obtain the two colored variants; determine whether the nominal dimensions include steps and overhangs; select a field location and independent measurements; assess outdoor tracking; then choose visitor distribution and an Android test device.
 
 Official references: [ARKit world tracking](https://developer.apple.com/documentation/arkit/arworldtrackingconfiguration), [raycast targets](https://developer.apple.com/documentation/arkit/arraycastquery/target-swift.enum), and [Apple membership comparison / Personal Team limits](https://developer.apple.com/support/compare-memberships/).

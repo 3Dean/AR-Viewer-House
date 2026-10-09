@@ -1,13 +1,21 @@
 {
-  "sourceSHA256": "03f2647eed8eb6ca1d8dc1b7bc1af03b99219ebc30e42dda01f64a54bd5a84c3",
-  "assetSHA256": "153fc33eb2973ab4642e4f3989dce3dcdc37504468543f92800873c2d92919c2",
+  "source": "house2story-front-corrected.glb",
+  "sourceSHA256": "35e9a6332eb0e50ae42aaf193bae623baca56e5b98404618d334e0f53e239938",
+  "assetSHA256": "dd0d1084a0cc1ddac4ab2d3cc7efe43c7c609c7fd854fbd42c65c18740c1f03d",
   "metersPerUnit": 1,
   "sourceReferenceMeters": [
-    10.65718,
-    2.75134113658345,
-    -3.51579
+    5.9146948158741,
+    -0.005815446376800537,
+    -4.7086732387542725
   ],
-  "reference": "front-left side-wing foundation ground vertex; source entrance facade -Z, canonical front +Z",
+  "reference": "User-marked front-left front-bay foundation corner beside the downspout, left of the entry porch",
+  "referenceImage": "docs/model-review/frontleftcornerinred.png",
+  "sourceFrontDirection": [
+    0,
+    0,
+    -1
+  ],
+  "nativeYawDegrees": 180,
   "frontDirection": [
     0,
     0,
@@ -24,10 +32,20 @@
     -1
   ],
   "dimensionsMeters": [
-    15.2991334877,
-    8.3009296001,
-    13.7675261965
+    15.299132823944092,
+    8.30092815309763,
+    13.767523288726807
   ],
-  "visualReview": "Geometry elevations and four diagonals reviewed; facade -Z; reference is left side-wing foundation corner, not entry steps or roof bounds. Textures require RealityKit device review.",
+  "nativeBoundsMinMeters": [
+    -1.5225863456726065,
+    -7.674098014831543e-07,
+    -10.982366085052488
+  ],
+  "nativeBoundsMaxMeters": [
+    13.776546478271484,
+    8.300927385687828,
+    2.785157203674317
+  ],
+  "visualReview": "User red-arrow reference identifies the front bay corner; converted native render must match facade, garage and porch. Phone confirmation remains required.",
   "triangleCount": 14987
 }

@@ -68,7 +68,7 @@ struct ContentView: View {
                 ScrollView {
                 DisclosureGroup("Placement controls", isExpanded: $showControls) {
                     VStack(spacing: 8) {
-                        Text("Green pin: front-left wing foundation. Yellow: front. Red: right. Blue: rear.")
+                        Text("Green pin: marked front-left foundation. Yellow: front. Red: right. Blue: rear.")
                             .font(.caption)
                         HStack {
                             Button("Rotate −1°") { session.rotate(-1) }

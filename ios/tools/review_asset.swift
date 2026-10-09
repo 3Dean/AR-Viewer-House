@@ -11,12 +11,13 @@ precondition(abs(bounds.extents.x - 15.299134) < 0.01)
 precondition(abs(bounds.extents.y - 8.30093) < 0.01)
 precondition(abs(bounds.extents.z - 13.767526) < 0.01)
 let scene = try SCNScene(url: url)
+let center = bounds.center
 let camera = SCNNode()
 camera.camera = SCNCamera()
 camera.camera!.usesOrthographicProjection = true
 camera.camera!.orthographicScale = 11
-camera.position = SCNVector3(-28, 17, 26)
-let target = SCNNode(); target.position = SCNVector3(7, 4, -3); scene.rootNode.addChildNode(target)
+camera.position = SCNVector3(center.x - 25.4, center.y + 8, center.z + 34.9)
+let target = SCNNode(); target.position = SCNVector3(center.x, center.y, center.z); scene.rootNode.addChildNode(target)
 let look = SCNLookAtConstraint(target: target); look.isGimbalLockEnabled = true
 camera.constraints = [look]; scene.rootNode.addChildNode(camera)
 let light = SCNNode(); light.light = SCNLight(); light.light!.type = .omni
@@ -33,4 +34,4 @@ let renderer = SCNRenderer(device: nil, options: nil)
 renderer.scene = scene; renderer.pointOfView = camera
 let image = renderer.snapshot(atTime: 0, with: CGSize(width: 1000,height: 900), antialiasingMode: .multisampling4X)
 let bitmap = NSBitmapImageRep(data: image.tiffRepresentation!)!
-try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: root + "/docs/model-review/usdz-native.png"))
+try bitmap.representation(using: .png, properties: [:])!.write(to: URL(fileURLWithPath: root + "/docs/model-review/corrected/usdz-native.png"))

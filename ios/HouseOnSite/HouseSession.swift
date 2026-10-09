@@ -48,7 +48,7 @@ final class HouseSession: NSObject, ObservableObject, ARSessionDelegate {
 
     private func beginAR() {
         trackingNormal = false
-        status = "Scan textured nearby ground, then tap the front-left foundation location."
+        status = "Scan textured nearby ground, then tap the marked front-left foundation location."
         isAR = true
     }
 

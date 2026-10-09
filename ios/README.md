@@ -14,7 +14,7 @@ Free Personal Team testing is for personal devices and has provisioning limits, 
 
 ## Behavior
 
-The USDZ has metre units and a baked front-left **side-wing foundation** ground origin; +X right, -Z rear, +Z front. See `../docs/MODEL-REFERENCE.md`. The selected corner is on the recessed side-wing foundation, behind the central facade. Rotation stays around that reference. Movement buttons change one foot along the current house axes; elevation changes three inches (bounded from −5′ to +10′). Scaling is fixed. Initial facade orientation faces the visitor.
+The USDZ has metre units and a baked user-marked front-left **front-bay foundation** ground origin; +X right, -Z rear, +Z front. See `../docs/MODEL-REFERENCE.md`. The selected corner is beside the front-bay downspout, left of the entry porch, as marked in the supplied reference. The corrected balcony/garage facade is the front. Rotation stays around that reference. Movement buttons change one foot along the current house axes; elevation changes three inches (bounded from −5′ to +10′). Scaling is fixed. Initial facade orientation faces the visitor.
 
 Lock blocks placement taps and transform edits while tracking continues. Guides remain a display option. Raycasts require normal tracking and detected horizontal geometry; visitors must choose ground rather than another horizontal surface. No printed marker or phone-height estimate is used. Each visitor independently establishes a new temporary session.
 
@@ -38,7 +38,7 @@ xcodebuild -project ios/HouseOnSite.xcodeproj -scheme HouseOnSite \
   CODE_SIGNING_ALLOWED=NO build
 ```
 
-Rebuild the specific source asset on macOS with Python 3 + Pillow and Apple's `usdcat`/`usdzip`:
+The active source is `house2story-front-corrected.glb`. `ios/tools/house-reference.json` defines its exact marked corner and source-to-native axis mapping; do not reuse normalization metadata from the old export. Rebuild this source asset on macOS with Python 3 + Pillow and Apple's `usdcat`/`usdzip`:
 
 ```sh
 python3 ios/tools/prepare_house.py --convert
@@ -63,3 +63,5 @@ swiftc -module-cache-path /tmp/house-swift-cache ios/HouseOnSite/Placement.swift
 ```
 
 Local validation on October 8, 2026: Xcode 26.3 unsigned iPhone build succeeded; RealityKit macOS loaded the USDZ at the expected bounds; native SceneKit textured render reviewed; placement checks and web tests/build passed. At that time no physical-phone or outdoor trial had been performed. On October 9 the user reported the prototype working outdoors at approximately 50′ to the street; measured error and the 100′ trial remain pending.
+
+On October 9, 2026 the corrected source replaced the native runtime USDZ. The original GLBs and preserved web assets remain unchanged. The corrected native render and RealityKit bounds were reviewed locally; confirm initial facade direction and the marked pivot on the iPhone after rebuilding in Xcode.

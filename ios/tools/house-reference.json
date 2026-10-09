@@ -1,0 +1,17 @@
+{
+  "source": "house2story-front-corrected.glb",
+  "sourceCornerMeters": [
+    5.9146948158741,
+    -0.005815446376800537,
+    -4.7086732387542725
+  ],
+  "sourceFrontDirection": [
+    0,
+    0,
+    -1
+  ],
+  "nativeYawDegrees": 180,
+  "referenceMaterial": "walls_1st_floor_Mat",
+  "reference": "User-marked front-left front-bay foundation corner beside the downspout, left of the entry porch",
+  "referenceImage": "docs/model-review/frontleftcornerinred.png"
+}

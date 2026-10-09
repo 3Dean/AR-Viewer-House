@@ -10,15 +10,15 @@ The Swift/ARKit/RealityKit app is in `ios/`. The web baseline at `5174008` is pr
 - [x] RealityKit macOS loader confirms USDZ dimensions; SceneKit native textured render reviewed; source SHA matches both unchanged GLBs.
 - [x] Root `npm test` (3 checks) and `npm run build` pass for the preserved web prototype.
 - [x] Native placement-math checks pass for metric steps, rotated directions, elevation and corner pivot.
-- Geometry-only review identified the -Z entrance facade and front-left side-wing foundation ground vertex. See `MODEL-REFERENCE.md`. Physical-device visual confirmation remains required.
+- The user supplied a corrected GLB and red-arrow corner reference. Corrected native rendering identifies the balcony/garage facade and the marked front-bay foundation vertex. See `MODEL-REFERENCE.md`. Physical-device visual confirmation remains required.
 
 ### Physical iPhone checks — formal checklist pending
 
-On October 9, 2026, the user reported successful outdoor use at approximately 50′ to the street. Device/iOS, lighting, surface and independent error measurements were not supplied; this report does not establish one-foot accuracy or 100′ performance.
+On October 9, 2026, the user reported successful outdoor use at approximately 50′ to the street. Device/iOS, lighting, surface and independent error measurements were not supplied; this report does not establish one-foot accuracy or 100′ performance. That trial used the earlier asset, whose facade was subsequently reported reversed. The corrected asset needs a fresh phone/field check.
 
 - [ ] Install on iPhone 13 Pro Max with Personal Team signing; record iOS and app revision.
 - [ ] Orbit the 3D preview. Check texture orientation, glass, normals, materials, ground and overall shape against the source.
-- [ ] Confirm green reference is the front-left outer side-wing foundation corner, not the roof/gutter bounding corner or right-side entry steps; confirm owner agrees with that reference.
+- [ ] Rebuild with the corrected USDZ. Confirm initial placement shows the balcony/garage facade (garage on right), and the green pin matches the red-arrow front-bay corner beside the downspout. Rotation must pivot at that point.
 - [ ] Verify independent overall dimensions. Nominal 50′ × 45′ × 27′; source bounds ≈50.19′ × 45.17′ × 27.23′. No arbitrary scaling.
 - [ ] Start AR, grant camera access, scan textured nearby ground. No printed target and no phone-height entry.
 - [ ] Place on detected horizontal ground within 8 m. Taps without a detected surface or normal tracking should not place; visitors must distinguish ground from tables/raised surfaces.

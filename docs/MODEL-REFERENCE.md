@@ -1,23 +1,29 @@
-# Native model reference review
+# Corrected native model reference
 
-The original `house2story.glb` and the web runtime GLB are unchanged. Source SHA-256: `03f2647eed8eb6ca1d8dc1b7bc1af03b99219ebc30e42dda01f64a54bd5a84c3`.
+The active native source is `house2story-front-corrected.glb`, supplied October 9, 2026. It is retained unchanged alongside the original `house2story.glb`. The preserved web prototype still uses its original GLB and provisional normalization.
 
-The reviewed entrance facade faces **source -Z** and contains the ground-floor entrance and steps, with the balcony side wing at the viewer's left. Viewing a right-handed Y-up scene from -Z makes source +X appear on screen-left. The selected front-left ground reference is the **front-left foundation corner of that side wing**, which is recessed behind the central facade. It is not the entry-step corner on the viewer's right, a gutter/roof corner, or an empty corner of an overall footprint rectangle.
+The user's marked image is authoritative for facade and corner identification. The **front** is the balcony/garage facade, with the garage on the viewer's right. The placement reference is the **front-left foundation corner of the projecting front bay beside its downspout**, left of the entry porch. It is not the porch/step edge, an overall bounding-box corner, or the earlier side-wing reference.
 
-![Native textured asset, with the selected foundation corner marked green](model-review/usdz-native.png)
+![User's front-left corner reference](model-review/frontleftcornerinred.png)
 
-![Front elevation and selected corner](model-review/front-reference.png)
+![Corrected native asset; green pin marks the same foundation corner](model-review/corrected/usdz-native.png)
 
-The first-floor wall primitive contains a ground vertex at approximately `(10.657180, 2.751341, -3.515790)` in transformed source metres. The converter asserts that this vertex exists. Native geometry is `(corner.x − source.x, source.y − corner.y, corner.z − source.z)`: a translation and a 180° Y rotation, with no resizing or reflection. Normals receive the same rotation. Native +X is facade-right, +Z faces front and -Z goes rear. This corrects the handedness ambiguity in the preserved web prototype's provisional axis convention; web code is unchanged.
+The first-floor wall primitive contains the selected source-world vertex at `(5.9146948158741, -0.005815446376800537, -4.7086732387542725)` metres. This export's marked corner is not at world zero, so the converter subtracts that vertex. It then maps source -Z front to native +Z front through a 180° Y-axis rotation. This explicit axis mapping replaces the previous export-specific normalization; the previous corner coordinates are not reused. Native +X is facade-right, +Y up, +Z front and -Z rear.
 
-RealityKit's macOS loader reports native bounds:
+`ios/tools/house-reference.json` records the source filename, selected vertex, reference image, material containing that vertex and axis mapping. The converter asserts the vertex exists and dimensions remain consistent. It does not resize, mirror or stretch the house. Node rotation/scale may be omitted in this new GLB; missing transforms correctly use identity defaults.
 
-- Minimum: approximately `(-0.067863, 0, -9.481844)` m.
-- Maximum: approximately `(15.231270, 8.300930, 4.285682)` m.
-- Dimensions: `15.299133 × 8.300930 × 13.767527` m (width × height × depth).
+RealityKit's macOS loader verifies approximately:
 
-The house extends in front of the recessed side-wing corner, and trim protrudes slightly to its left. Negative coordinates are therefore intentional. Rotation and elevation operate about the actual selected corner rather than the bounds centre.
+- Bounds minimum: `(-1.522586, -0.00000077, -10.982367)` m.
+- Bounds maximum: `(13.776547, 8.300927, 2.785157)` m.
+- Dimensions: `15.299133 × 8.300928 × 13.767524` m (width × height × depth), approximately 50.19′ × 27.23′ × 45.17′.
 
-The conversion contains 11 mesh primitives, 14,987 triangles, all 30 embedded JPEG textures, normals and UVs. USD Preview Surface maps diffuse, normal, and the source metallic/roughness channels; the original glass material remains as exported rather than introducing inferred transparency. The textured image above uses SceneKit's offscreen renderer; RealityKit separately loaded the same USDZ and checked the bounds. Rendering on the physical iPhone remains untested.
+The sub-micrometre negative Y extent is floating-point variation between foundation vertices. Geometry extends left and forward of the selected architectural bay corner; negative coordinates are intentional. Rotation and elevation pivot around the user's selected feature, rather than around the overall bounds centre.
 
-Geometry views in this folder are inspection diagrams with flat material colors, not texture or architectural accuracy evidence. Native visual review confirms the facade and selected mesh corner. The owner should confirm this side-wing corner is the intended architectural reference before field acceptance; a preferred wall/step location can be substituted by changing the recorded semantic reference and regenerating the asset. No survey or outdoor alignment accuracy has been established.
+The corrected GLB retains 14,987 triangles, 11 material primitives and 30 embedded JPEG textures. The USDZ preserves geometry, normals, UVs and the source material mapping. The native image above is a SceneKit offscreen render of the USDZ; RealityKit independently loads that same package and checks its size. White balcony railing and opaque/dark glass follow the source textures/materials; the diagram colors are only inspection aids.
+
+Hashes and conversion bounds are recorded in `public/models/ios/house2story-metadata.json`; structural inspection is in `house2story-front-corrected-inspection.json`. The corrected source SHA-256 is `35e9a6332eb0e50ae42aaf193bae623baca56e5b98404618d334e0f53e239938`. Both preserved original GLBs still have SHA-256 `03f2647eed8eb6ca1d8dc1b7bc1af03b99219ebc30e42dda01f64a54bd5a84c3`.
+
+Older images directly under `docs/model-review/`, except the user's `frontleftcornerinred.png`, document the superseded normalization and must not be used as current facade/corner guidance. Current review artifacts are in `docs/model-review/corrected/`.
+
+The owner supplied the architectural reference; the corrected textured render has been compared visually with it. Physical-iPhone confirmation of initial facade orientation, green-pin location and rotation pivot remains required. No measured alignment or outdoor accuracy is established by this conversion.

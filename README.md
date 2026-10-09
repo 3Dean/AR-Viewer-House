@@ -4,7 +4,7 @@ The active prototype is a native iPhone app using Swift, ARKit, and RealityKit i
 
 The TypeScript/Three.js/Vite/Zappar web prototype from `5174008` is preserved below as an experimental viewer. It is not the active AR development path. One-foot alignment over walks up to 100 feet remains a field-test target. See the updated project plan and `docs/AR-TEST-CHECKLIST.md`.
 
-The native asset is `public/models/ios/house2story.usdz`. Its visually reviewed front-left side-wing foundation reference is documented in `docs/MODEL-REFERENCE.md`; the preserved web normalization remains provisional.
+The native asset is `public/models/ios/house2story.usdz`. It is derived from the preserved `house2story-front-corrected.glb`. Its user-marked front-left front-bay foundation reference is documented in `docs/MODEL-REFERENCE.md`; the preserved web normalization remains provisional.
 
 ## Run the preserved web prototype
 

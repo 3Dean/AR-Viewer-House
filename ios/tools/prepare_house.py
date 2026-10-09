@@ -1,9 +1,19 @@
-"""Deterministic converter for this inspected GLB; no third-party Python modules required except Pillow for review images."""
+"""Convert the inspected house using explicit, user-reviewed facade/corner metadata.
+Pillow provides geometry review diagrams; Apple USD tools package the native asset.
+"""
 import json, struct, math, hashlib, zipfile
 from pathlib import Path
 from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parents[2]
-source = ROOT / 'house2story.glb'
+config = json.loads((Path(__file__).parent / 'house-reference.json').read_text())
+source = ROOT / config['source']
+corner = tuple(config['sourceCornerMeters'])
+yaw = math.radians(config['nativeYawDegrees'])
+cos_yaw, sin_yaw = math.cos(yaw), math.sin(yaw)
+review = ROOT / 'docs/model-review/corrected'
+review.mkdir(parents=True, exist_ok=True)
+def rotate(p):
+    return (cos_yaw*p[0]+sin_yaw*p[2], p[1], -sin_yaw*p[0]+cos_yaw*p[2])
 b = source.read_bytes()
 size = struct.unpack_from('<I', b, 12)[0]
 g = json.loads(b[20:20+size])
@@ -11,7 +21,7 @@ binary = b[28+size:]
 assert len(g['nodes']) == 1 and len(g['meshes']) == 1 and not g.get('animations')
 n = g['nodes'][0]
 assert 'matrix' not in n
-x,y,z,w = n['rotation']; sx,sy,sz = n['scale']; tx,ty,tz = n['translation']
+x,y,z,w = n.get('rotation',[0,0,0,1]); sx,sy,sz = n.get('scale',[1,1,1]); tx,ty,tz = n.get('translation',[0,0,0])
 m = [(1-2*y*y-2*z*z)*sx,(2*x*y+2*z*w)*sx,(2*x*z-2*y*w)*sx,
      (2*x*y-2*z*w)*sy,(1-2*x*x-2*z*z)*sy,(2*y*z+2*x*w)*sy,
      (2*x*z+2*y*w)*sz,(2*y*z-2*x*w)*sz,(1-2*x*x-2*y*y)*sz]
@@ -30,14 +40,22 @@ for pr in g['meshes'][0]['primitives']:
     pts=[world(p) for p in read(pr['attributes']['POSITION'])]
     ids=[i[0] for i in read(pr['indices'])]
     primitives.append((pr,pts,ids))
+all_points = [p for _,pts,_ in primitives for p in pts]
+low = [min(p[i] for p in all_points) for i in range(3)]
+high = [max(p[i] for p in all_points) for i in range(3)]
+center = [(low[i]+high[i])/2 for i in range(3)]
+dimensions = [high[i]-low[i] for i in range(3)]
+assert all(abs(a-b)<0.01 for a,b in zip(dimensions,[15.2991334877,8.3009296001,13.7675261965])), 'Unexpected house dimensions; review scale before conversion'
+reference_points = [p for pr,pts,_ in primitives if g['materials'][pr['material']]['name'] == config['referenceMaterial'] for p in pts]
+assert min(sum((p[i]-corner[i])**2 for i in range(3)) for p in reference_points) < 1e-12, 'Reviewed foundation vertex is absent'
 colors=['#a64c2d','#e8cdb0','#e5c2a0','#624b37','#aaa29a','#665646','#87bdce','#e1c4a1','#eedbc1','#383b36','#595c60']
 # Orthographic geometry review, four diagonals. Painter's algorithm is for inspection only.
 for name,ax,az in [('southwest',-1,-1),('southeast',1,-1),('northwest',-1,1),('northeast',1,1)]:
-    forward=(ax/math.sqrt(2),-.45,az/math.sqrt(2))
+    forward=(ax/math.sqrt(2),.45,az/math.sqrt(2))
     right=(az/math.sqrt(2),0,-ax/math.sqrt(2))
     up=(-.318*ax,1,-.318*az)
     def project(p):
-        q=(p[0]-3.075,p[1]-6.9,p[2]+.918)
+        q=tuple(p[i]-center[i] for i in range(3))
         return (500+28*sum(q[i]*right[i] for i in range(3)),450-28*sum(q[i]*up[i] for i in range(3)))
     faces=[]
     for pr,pts,ids in primitives:
@@ -48,26 +66,26 @@ for name,ax,az in [('southwest',-1,-1),('southeast',1,-1),('northwest',-1,1),('n
     im=Image.new('RGB',(1000,850),'#d5e0e5'); draw=ImageDraw.Draw(im)
     for depth,tri,color in sorted(faces): draw.polygon(tri,fill=color)
     draw.text((20,20),name+' | source coordinates | Y up | -Z entrance facade',fill='black')
-    im.save(ROOT / 'docs/model-review' / (name+'.png'))
+    im.save(review / (name+'.png'))
 # Physical camera handedness: viewed from source -Z, source +X appears screen-left.
-for name,axis,sign in [('front',2,-1),('left',0,-1),('rear',2,1)]:
+for name,axis,sign in [('front',2,-1),('left',0,1),('rear',2,1)]:
     faces=[]
     for pr,pts,ids in primitives:
         for j in range(0,len(ids),3):
             tri=[pts[i] for i in ids[j:j+3]]
-            projected=[(500+(sign if axis==2 else -sign)*40*(p[0 if axis==2 else 2]-(3.075 if axis==2 else -.918)),650-50*(p[1]-2.75134)) for p in tri]
+            projected=[(500+(sign if axis==2 else -sign)*40*(p[0 if axis==2 else 2]-center[0 if axis==2 else 2]),650-50*(p[1]-corner[1])) for p in tri]
             faces.append((sum(sign*p[axis] for p in tri),projected,colors[pr['material']]))
     im=Image.new('RGB',(1000,760),'#d5e0e5'); draw=ImageDraw.Draw(im)
     for _,tri,color in sorted(faces): draw.polygon(tri,fill=color)
     draw.text((20,20),name+' | source geometry elevation',fill='black')
-    im.save(ROOT/'docs/model-review'/(name+'.png'))
+    im.save(review/(name+'.png'))
 # Annotate the front elevation with physical screen orientation.
-im=Image.open(ROOT/'docs/model-review/front.png'); dr=ImageDraw.Draw(im)
-px=500-40*(10.65718-3.075); py=650
+im=Image.open(review/'front.png'); dr=ImageDraw.Draw(im)
+px=500-40*(corner[0]-center[0]); py=650
 dr.ellipse((px-8,py-8,px+8,py+8),fill='#05aa59',outline='black',width=2)
 dr.line((px,py,px-35,py+38),fill='black',width=2)
-dr.text((max(10,px-130),py+42),'Origin: left wing foundation at ground',fill='black')
-im.save(ROOT/'docs/model-review/front-reference.png')
+dr.text((max(10,px-130),py+42),'Origin: user-marked front bay foundation',fill='black')
+im.save(review/'front-reference.png')
 
 # Conversion uses the native-render-reviewed foundation corner in source metres.
 if __name__=='__main__' and '--convert' not in __import__('sys').argv:
@@ -76,9 +94,6 @@ if __name__=='__main__' and '--convert' not in __import__('sys').argv:
 import subprocess
 out=ROOT/'public/models/ios'; out.mkdir(exist_ok=True)
 work=out/'conversion'; work.mkdir(exist_ok=True)
-corner=(10.65718,2.75134113658345,-3.51579)
-# Exact vertex check: front-left side-wing foundation corner, not roof/gutter extrema.
-assert min(sum((p[i]-corner[i])**2 for i in range(3)) for p in primitives[1][1]) < 1e-8
 f=lambda v: format(v,'.9g')
 vec=lambda p:'('+', '.join(f(x) for x in p)+')'
 arr=lambda ps:', '.join(vec(p) for p in ps)
@@ -104,11 +119,11 @@ for index,mat in enumerate(g['materials']):
  lines += ['}']
 lines += ['}']
 for index,(pr,pts,ids) in enumerate(primitives):
- points=[(corner[0]-p[0], p[1]-corner[1], corner[2]-p[2]) for p in pts]
+ points=[rotate(tuple(p[i]-corner[i] for i in range(3))) for p in pts]
  normals=[]
  for normal in read(pr['attributes']['NORMAL']):
-  q=[sum(m[k*3+r]*normal[k]/(n['scale'][k]**2) for k in range(3)) for r in range(3)]
-  length=math.sqrt(sum(v*v for v in q)); normals.append((-q[0]/length, q[1]/length, -q[2]/length))
+  q=[sum(m[k*3+r]*normal[k]/(n.get('scale',[1,1,1])[k]**2) for k in range(3)) for r in range(3)]
+  length=math.sqrt(sum(v*v for v in q)); normals.append(rotate(tuple(v/length for v in q)))
  uv=[(u,1-v) for u,v in read(pr['attributes']['TEXCOORD_0'])]
  lines += [f'def Mesh "Mesh{index}" (prepend apiSchemas = ["MaterialBindingAPI"]) {{',f'point3f[] points = [{arr(points)}]',f'int[] faceVertexCounts = [{", ".join(["3"]*(len(ids)//3))}]',f'int[] faceVertexIndices = [{", ".join(map(str,ids))}]',f'normal3f[] normals = [{arr(normals)}] (interpolation = "vertex")',f'texCoord2f[] primvars:st = [{arr(uv)}] (interpolation = "vertex")','uniform token subdivisionScheme = "none"','uniform bool doubleSided = true',f'rel material:binding = </House/Materials/M{pr["material"]}>','}']
 lines += ['}']
@@ -125,6 +140,18 @@ with zipfile.ZipFile(asset) as z:
    fp.seek(info.header_offset); h=fp.read(30); namelen,extra=struct.unpack_from('<HH',h,26)
   assert (info.header_offset+30+namelen+extra)%64==0
   assert info.compress_type==zipfile.ZIP_STORED
-metadata={'sourceSHA256':hashlib.sha256(b).hexdigest(),'assetSHA256':hashlib.sha256(asset.read_bytes()).hexdigest(),'metersPerUnit':1,'sourceReferenceMeters':corner,'reference':'front-left side-wing foundation ground vertex; source entrance facade -Z, canonical front +Z','frontDirection':[0,0,1],'rightDirection':[1,0,0],'rearDirection':[0,0,-1],'dimensionsMeters':[15.2991334877,8.3009296001,13.7675261965],'visualReview':'Geometry elevations and four diagonals reviewed; facade -Z; reference is left side-wing foundation corner, not entry steps or roof bounds. Textures require RealityKit device review.','triangleCount':sum(len(ids)//3 for _,_,ids in primitives)}
+normalized = [rotate(tuple(p[i]-corner[i] for i in range(3))) for p in all_points]
+metadata = {
+ 'source': config['source'], 'sourceSHA256': hashlib.sha256(b).hexdigest(),
+ 'assetSHA256': hashlib.sha256(asset.read_bytes()).hexdigest(), 'metersPerUnit': 1,
+ 'sourceReferenceMeters': corner, 'reference': config['reference'],
+ 'referenceImage': config['referenceImage'], 'sourceFrontDirection': config['sourceFrontDirection'],
+ 'nativeYawDegrees': config['nativeYawDegrees'], 'frontDirection': [0,0,1],
+ 'rightDirection': [1,0,0], 'rearDirection': [0,0,-1], 'dimensionsMeters': dimensions,
+ 'nativeBoundsMinMeters': [min(p[i] for p in normalized) for i in range(3)],
+ 'nativeBoundsMaxMeters': [max(p[i] for p in normalized) for i in range(3)],
+ 'visualReview': 'User red-arrow reference identifies the front bay corner; converted native render must match facade, garage and porch. Phone confirmation remains required.',
+ 'triangleCount': sum(len(ids)//3 for _,_,ids in primitives)
+}
 (out/'house2story-metadata.json').write_text(json.dumps(metadata,indent=2)+'\n')
 print(json.dumps(metadata,indent=2))
