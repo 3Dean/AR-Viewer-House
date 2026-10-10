@@ -14,6 +14,8 @@ Free Personal Team testing is for personal devices and has provisioning limits, 
 
 ## Behavior
 
+The native interface uses **Cyan Studio** for the 3D preview and **Field Lens** for AR: navy surfaces, cyan actions, the supplied brand mark, and a camera-first layout with a collapsible control panel. The supplied house is named **The Madison**; its approximate dimensions are model details, not app-wide dimensions. Only this house is currently available; no fixed catalog count or unimplemented selector is displayed. The preview and control panel scroll on smaller screens and in landscape. Placement, lighting, capture, and permission recovery retain their existing behavior.
+
 The USDZ has metre units and a baked user-marked front-left **front-bay foundation** ground origin; +X right, -Z rear, +Z front. See `../docs/MODEL-REFERENCE.md`. The selected corner is beside the front-bay downspout, left of the entry porch, as marked in the supplied reference. The corrected balcony/garage facade is the front. Rotation stays around that reference. Movement buttons change one foot along the current house axes; elevation changes three inches (bounded from −5′ to +10′). Scaling is fixed. Initial facade orientation faces the visitor.
 
 Lock blocks placement taps and transform edits while tracking continues. Guides remain a display option. Raycasts require normal tracking and detected horizontal geometry; visitors must choose ground rather than another horizontal surface. No printed marker or phone-height estimate is used. Each visitor independently establishes a new temporary session.
@@ -75,3 +77,9 @@ swiftc -module-cache-path /tmp/house-swift-cache ios/HouseOnSite/Placement.swift
 Local validation on October 8, 2026: Xcode 26.3 unsigned iPhone build succeeded; RealityKit macOS loaded the USDZ at the expected bounds; native SceneKit textured render reviewed; placement checks and web tests/build passed. At that time no physical-phone or outdoor trial had been performed. On October 9 the user reported the prototype working outdoors at approximately 50′ to the street; measured error and the 100′ trial remain pending.
 
 On October 9, 2026 the corrected source replaced the native runtime USDZ. The original GLBs and preserved web assets remain unchanged. The corrected native render and RealityKit bounds were reviewed locally; confirm initial facade direction and the marked pivot on the iPhone after rebuilding in Xcode.
+
+## App icon and distribution
+
+The target bundles `HouseOnSite/Assets.xcassets/AppIcon.appiconset`, using an opaque 1024×1024 copy of the supplied branding image. Both Debug and Release select **AppIcon** as the app icon asset name. A regular Image Set with 1x/2x/3x slots does not serve as an app icon.
+
+After an icon change, create a new archive with Product → Archive; existing archives retain their old icon. Choose the newly created archive in Organizer for App Store Connect distribution. TestFlight and App Store Connect obtain the icon from the uploaded build.
